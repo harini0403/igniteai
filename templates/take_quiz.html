@@ -1,0 +1,334 @@
+{% extends "base.html" %}
+
+{% block title %}{{ quiz.title }} - Ignite AI{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <!-- Header -->
+            <div class="text-center mb-5">
+                <h1 class="display-6 fw-bold mb-3">
+                    <i class="fas fa-clipboard-list text-primary me-3"></i>
+                    {{ quiz.title }}
+                </h1>
+                <div class="d-flex justify-content-center gap-3 flex-wrap">
+                    <span class="badge bg-primary fs-6 px-3 py-2 rounded-pill">
+                        <i class="fas fa-user me-1"></i>
+                        Age {{ age }}
+                    </span>
+                    <span class="badge bg-success fs-6 px-3 py-2 rounded-pill">
+                        <i class="fas fa-clock me-1"></i>
+                        {{ quiz.estimated_time }}
+                    </span>
+                    <span class="badge bg-info fs-6 px-3 py-2 rounded-pill">
+                        <i class="fas fa-question me-1"></i>
+                        {{ quiz.total_questions }} questions
+                    </span>
+                    <span class="badge bg-warning fs-6 px-3 py-2 rounded-pill">
+                        <i class="fas fa-brain me-1"></i>
+                        {{ topic }}
+                    </span>
+                </div>
+            </div>
+
+            <!-- Quiz Form -->
+            <form action="#" method="POST" id="quizForm">
+                {% for question in quiz.questions %}
+                <div class="card mb-4 border-0 shadow-sm">
+                    <div class="card-header bg-light">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h6 class="mb-0 text-primary">
+                                <i class="fas fa-question-circle me-2"></i>
+                                Question {{ question.id }} of {{ quiz.total_questions }}
+                            </h6>
+                            <span class="badge bg-{{ 'success' if question.difficulty == 'easy' else 'warning' if question.difficulty == 'medium' else 'danger' }}">
+                                {{ question.difficulty.title() }}
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <div class="card-body p-4">
+                        <h5 class="card-title mb-4">{{ question.question }}</h5>
+                        
+                        <div class="row g-3">
+                            {% for option_key, option_text in question.options.items() %}
+                            <div class="col-md-6">
+                                <div class="form-check custom-option">
+                                    <input class="form-check-input" 
+                                           type="radio" 
+                                           name="question_{{ question.id }}" 
+                                           id="q{{ question.id }}_{{ option_key }}" 
+                                           value="{{ option_key }}"
+                                           data-correct="{{ question.correct_answer }}"
+                                           data-explanation="{{ question.explanation }}"
+                                           required>
+                                    <label class="form-check-label w-100 p-3 border rounded hover-option" 
+                                           for="q{{ question.id }}_{{ option_key }}">
+                                        <strong>{{ option_key }}.</strong> {{ option_text }}
+                                    </label>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        
+                        <div class="mt-3">
+                            <small class="text-muted">
+                                <i class="fas fa-tag me-1"></i>
+                                Topic: {{ question.topic }}
+                            </small>
+                        </div>
+                        
+                        <!-- Explanation area (hidden initially) -->
+                        <div class="explanation-area mt-4 p-3 rounded d-none" id="explanation_{{ question.id }}">
+                            <div class="d-flex align-items-start">
+                                <div class="result-icon me-3">
+                                    <i class="fas fa-check-circle text-success fs-4"></i>
+                                </div>
+                                <div>
+                                    <h6 class="result-text text-success mb-2">Correct!</h6>
+                                    <p class="explanation-text mb-0">{{ question.explanation }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+
+                <!-- Results Section -->
+                <div class="card border-0 shadow-lg d-none" id="resultsSection">
+                    <div class="card-header bg-success text-white text-center">
+                        <h4 class="mb-0">
+                            <i class="fas fa-trophy me-2"></i>
+                            Quiz Complete!
+                        </h4>
+                    </div>
+                    <div class="card-body text-center p-5">
+                        <div class="score-display mb-4">
+                            <h2 class="text-success mb-2" id="finalScore">0/{{ quiz.total_questions }}</h2>
+                            <p class="text-muted" id="scorePercentage">0%</p>
+                        </div>
+                        
+                        <div class="performance-message mb-4" id="performanceMessage">
+                            <!-- Dynamic message based on score -->
+                        </div>
+                        
+                        <div class="d-flex justify-content-center gap-3 flex-wrap">
+                            <a href="{{ url_for('quiz') }}" class="btn btn-primary btn-lg rounded-pill px-4">
+                                <i class="fas fa-redo me-2"></i>
+                                Take Another Quiz
+                            </a>
+                            <a href="{{ url_for('assessment') }}" class="btn btn-success btn-lg rounded-pill px-4">
+                                <i class="fas fa-brain me-2"></i>
+                                Full Assessment
+                            </a>
+                            <a href="{{ url_for('study_plan') }}" class="btn btn-info btn-lg rounded-pill px-4">
+                                <i class="fas fa-calendar-alt me-2"></i>
+                                Study Plan
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+            <!-- Progress Indicator -->
+            <div class="fixed-bottom bg-white shadow p-3 d-none" id="progressBar">
+                <div class="container">
+                    <div class="d-flex align-items-center">
+                        <small class="me-3">Progress:</small>
+                        <div class="progress flex-grow-1 me-3">
+                            <div class="progress-bar bg-success" role="progressbar" style="width: 0%"></div>
+                        </div>
+                        <small class="text-muted" id="progressText">0/{{ quiz.total_questions }}</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<style>
+.custom-option {
+    margin: 0;
+}
+
+.hover-option {
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: block;
+    margin: 0;
+}
+
+.hover-option:hover {
+    background-color: var(--bs-light);
+    border-color: var(--bs-primary) !important;
+}
+
+.form-check-input:checked + .hover-option {
+    background-color: rgba(var(--bs-primary-rgb), 0.1);
+    border-color: var(--bs-primary) !important;
+    color: var(--bs-primary);
+}
+
+.explanation-area {
+    border: 1px solid #dee2e6;
+    background-color: #f8f9fa;
+}
+
+.explanation-area.correct {
+    border-color: #198754;
+    background-color: rgba(25, 135, 84, 0.1);
+}
+
+.explanation-area.incorrect {
+    border-color: #dc3545;
+    background-color: rgba(220, 53, 69, 0.1);
+}
+
+.fixed-bottom {
+    transition: transform 0.3s ease;
+}
+
+.score-display {
+    font-size: 2rem;
+    font-weight: bold;
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('quizForm');
+    const progressBar = document.getElementById('progressBar');
+    const progressBarFill = progressBar.querySelector('.progress-bar');
+    const progressText = document.getElementById('progressText');
+    const resultsSection = document.getElementById('resultsSection');
+    const totalQuestions = {{ quiz.total_questions }};
+    
+    let answeredQuestions = 0;
+    let correctAnswers = 0;
+    let progressShown = false;
+    
+    function updateProgress() {
+        const percentage = (answeredQuestions / totalQuestions) * 100;
+        
+        progressBarFill.style.width = percentage + '%';
+        progressText.textContent = `${answeredQuestions}/${totalQuestions}`;
+        
+        if (!progressShown && answeredQuestions > 0) {
+            progressBar.classList.remove('d-none');
+            progressShown = true;
+        }
+        
+        // Show results when all questions are answered
+        if (answeredQuestions === totalQuestions) {
+            setTimeout(showResults, 1000);
+        }
+    }
+    
+    function showResults() {
+        const percentage = Math.round((correctAnswers / totalQuestions) * 100);
+        
+        // Update score display
+        document.getElementById('finalScore').textContent = `${correctAnswers}/${totalQuestions}`;
+        document.getElementById('scorePercentage').textContent = `${percentage}%`;
+        
+        // Show performance message
+        const messageEl = document.getElementById('performanceMessage');
+        let message = '';
+        let messageClass = '';
+        
+        if (percentage >= 90) {
+            message = 'Outstanding! You have excellent knowledge of this AI topic!';
+            messageClass = 'text-success';
+        } else if (percentage >= 70) {
+            message = 'Great job! You have a solid understanding of this topic.';
+            messageClass = 'text-success';
+        } else if (percentage >= 50) {
+            message = 'Good effort! Keep studying to improve your understanding.';
+            messageClass = 'text-warning';
+        } else {
+            message = 'Nice try! This topic needs more study, but you\'re learning!';
+            messageClass = 'text-info';
+        }
+        
+        messageEl.innerHTML = `<p class="${messageClass} fs-5">${message}</p>`;
+        
+        // Hide progress bar and show results
+        progressBar.classList.add('d-none');
+        resultsSection.classList.remove('d-none');
+        
+        // Scroll to results
+        resultsSection.scrollIntoView({
+            behavior: 'smooth',
+            block: 'center'
+        });
+    }
+    
+    // Add event listeners to all radio buttons
+    form.querySelectorAll('input[type="radio"]').forEach(radio => {
+        radio.addEventListener('change', function() {
+            const questionId = this.name.split('_')[1];
+            const userAnswer = this.value;
+            const correctAnswer = this.getAttribute('data-correct');
+            const explanation = this.getAttribute('data-explanation');
+            
+            // Check if this question was already answered
+            const wasAnswered = this.closest('.card').querySelector('.explanation-area:not(.d-none)');
+            if (!wasAnswered) {
+                answeredQuestions++;
+                if (userAnswer === correctAnswer) {
+                    correctAnswers++;
+                }
+            }
+            
+            // Show explanation
+            const explanationArea = document.getElementById(`explanation_${questionId}`);
+            const isCorrect = userAnswer === correctAnswer;
+            
+            explanationArea.classList.remove('d-none');
+            explanationArea.classList.add(isCorrect ? 'correct' : 'incorrect');
+            
+            // Update explanation content
+            const resultIcon = explanationArea.querySelector('.result-icon i');
+            const resultText = explanationArea.querySelector('.result-text');
+            const explanationText = explanationArea.querySelector('.explanation-text');
+            
+            if (isCorrect) {
+                resultIcon.className = 'fas fa-check-circle text-success fs-4';
+                resultText.textContent = 'Correct!';
+                resultText.className = 'result-text text-success mb-2';
+            } else {
+                resultIcon.className = 'fas fa-times-circle text-danger fs-4';
+                resultText.textContent = `Incorrect. The answer is ${correctAnswer}.`;
+                resultText.className = 'result-text text-danger mb-2';
+            }
+            
+            explanationText.textContent = explanation;
+            
+            // Disable all options for this question
+            this.closest('.card').querySelectorAll('input[type="radio"]').forEach(radio => {
+                radio.disabled = true;
+            });
+            
+            // Update progress
+            updateProgress();
+            
+            // Auto-scroll to next question
+            setTimeout(() => {
+                const currentCard = this.closest('.card');
+                const nextCard = currentCard.nextElementSibling;
+                
+                if (nextCard && nextCard.classList.contains('card')) {
+                    nextCard.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'center'
+                    });
+                }
+            }, 1500);
+        });
+    });
+});
+</script>
+{% endblock %}

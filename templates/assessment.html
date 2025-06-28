@@ -1,0 +1,187 @@
+{% extends "base.html" %}
+
+{% block title %}AI Knowledge Assessment - Ignite AI{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <!-- Header -->
+            <div class="text-center mb-5">
+                <h1 class="display-5 fw-bold mb-3">
+                    <i class="fas fa-brain text-primary me-3"></i>
+                    AI Knowledge Assessment
+                </h1>
+                <p class="lead text-muted">
+                    Let's find out what you already know about AI! This will help us create a perfect learning plan just for you.
+                </p>
+            </div>
+
+            <!-- Assessment Form -->
+            <div class="card shadow-lg border-0 rounded-4">
+                <div class="card-header bg-primary text-white text-center py-4">
+                    <h4 class="mb-0">
+                        <i class="fas fa-clipboard-check me-2"></i>
+                        Start Your AI Assessment
+                    </h4>
+                </div>
+                
+                <div class="card-body p-5">
+                    <form method="POST" id="assessmentForm">
+                        <!-- Age Input -->
+                        <div class="mb-4">
+                            <label for="age" class="form-label fs-5 fw-semibold">
+                                <i class="fas fa-birthday-cake text-warning me-2"></i>
+                                How old are you?
+                            </label>
+                            <div class="input-group input-group-lg">
+                                <span class="input-group-text">
+                                    <i class="fas fa-user"></i>
+                                </span>
+                                <input type="number" 
+                                       class="form-control" 
+                                       id="age" 
+                                       name="age" 
+                                       min="5" 
+                                       max="18" 
+                                       placeholder="Enter your age (5-18)"
+                                       required>
+                                <span class="input-group-text">years old</span>
+                            </div>
+                            <div class="form-text">
+                                <i class="fas fa-info-circle me-1"></i>
+                                This helps us ask questions at the right level for you!
+                            </div>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary btn-lg px-5 py-3 rounded-pill" id="submitBtn">
+                                <span class="submit-text">
+                                    <i class="fas fa-rocket me-2"></i>
+                                    Start My Assessment!
+                                </span>
+                                <span class="loading-text d-none">
+                                    <i class="fas fa-spinner fa-spin me-2"></i>
+                                    Creating your assessment...
+                                </span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- What to Expect Section -->
+            <div class="mt-5">
+                <h3 class="text-center mb-4">
+                    <i class="fas fa-question text-info me-2"></i>
+                    What to Expect
+                </h3>
+                
+                <div class="row g-4">
+                    <div class="col-md-4">
+                        <div class="card border-0 bg-light h-100 text-center">
+                            <div class="card-body p-4">
+                                <div class="mb-3">
+                                    <i class="fas fa-clock text-primary display-6"></i>
+                                </div>
+                                <h6 class="text-primary mb-2">Quick & Fun</h6>
+                                <p class="small mb-0">Takes just 10-15 minutes to complete</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4">
+                        <div class="card border-0 bg-light h-100 text-center">
+                            <div class="card-body p-4">
+                                <div class="mb-3">
+                                    <i class="fas fa-graduation-cap text-success display-6"></i>
+                                </div>
+                                <h6 class="text-success mb-2">Perfect Level</h6>
+                                <p class="small mb-0">Questions matched to your age and experience</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4">
+                        <div class="card border-0 bg-light h-100 text-center">
+                            <div class="card-body p-4">
+                                <div class="mb-3">
+                                    <i class="fas fa-route text-warning display-6"></i>
+                                </div>
+                                <h6 class="text-warning mb-2">Personal Roadmap</h6>
+                                <p class="small mb-0">Get a custom AI learning path based on your results</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Topics Covered -->
+            <div class="mt-5">
+                <h3 class="text-center mb-4">
+                    <i class="fas fa-list text-success me-2"></i>
+                    Topics We'll Explore
+                </h3>
+                
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="d-flex align-items-center p-3 bg-light rounded">
+                            <i class="fas fa-robot text-primary me-3 fs-4"></i>
+                            <div>
+                                <h6 class="mb-1">AI Basics</h6>
+                                <small class="text-muted">What is AI and how does it work?</small>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <div class="d-flex align-items-center p-3 bg-light rounded">
+                            <i class="fas fa-brain text-success me-3 fs-4"></i>
+                            <div>
+                                <h6 class="mb-1">Machine Learning</h6>
+                                <small class="text-muted">How computers learn from data</small>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <div class="d-flex align-items-center p-3 bg-light rounded">
+                            <i class="fas fa-eye text-info me-3 fs-4"></i>
+                            <div>
+                                <h6 class="mb-1">Computer Vision</h6>
+                                <small class="text-muted">How AI sees and understands images</small>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <div class="d-flex align-items-center p-3 bg-light rounded">
+                            <i class="fas fa-shield-alt text-warning me-3 fs-4"></i>
+                            <div>
+                                <h6 class="mb-1">AI Ethics</h6>
+                                <small class="text-muted">Using AI safely and responsibly</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.getElementById('assessmentForm').addEventListener('submit', function() {
+    const submitBtn = document.getElementById('submitBtn');
+    const submitText = submitBtn.querySelector('.submit-text');
+    const loadingText = submitBtn.querySelector('.loading-text');
+    
+    // Show loading state
+    submitText.classList.add('d-none');
+    loadingText.classList.remove('d-none');
+    submitBtn.disabled = true;
+});
+</script>
+{% endblock %}

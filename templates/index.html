@@ -16,11 +16,11 @@
                     Get age-appropriate explanations about AI concepts and personalized AI study plans.
                 </p>
                 <div class="d-flex gap-3 flex-wrap">
-                    <a href="{{ url_for('ask_question') }}" class="btn btn-warning btn-lg px-4 py-3 rounded-pill">
-                        <i class="fas fa-question-circle me-2"></i>Ask a Question
+                    <a href="{{ url_for('assessment') }}" class="btn btn-warning btn-lg px-4 py-3 rounded-pill">
+                        <i class="fas fa-brain me-2"></i>Take Assessment
                     </a>
-                    <a href="{{ url_for('study_plan') }}" class="btn btn-outline-light btn-lg px-4 py-3 rounded-pill">
-                        <i class="fas fa-calendar-alt me-2"></i>Create Study Plan
+                    <a href="{{ url_for('ask_question') }}" class="btn btn-outline-light btn-lg px-4 py-3 rounded-pill">
+                        <i class="fas fa-question-circle me-2"></i>Ask Questions
                     </a>
                 </div>
             </div>
@@ -48,15 +48,14 @@
                 <div class="feature-card card h-100 border-0 shadow-sm hover-lift">
                     <div class="card-body text-center p-4">
                         <div class="feature-icon mb-3">
-                            <i class="fas fa-comments text-primary display-4"></i>
+                            <i class="fas fa-brain text-primary display-4"></i>
                         </div>
-                        <h4 class="card-title text-primary">Ask AI Questions</h4>
+                        <h4 class="card-title text-primary">AI Assessment</h4>
                         <p class="card-text">
-                            Ask me anything about artificial intelligence and I'll explain it in a way that's perfect for your age! 
-                            From neural networks to machine learning to robotics - I'm here to help.
+                            Take a quick assessment to discover your current AI knowledge level and get a personalized learning roadmap tailored just for you!
                         </p>
-                        <a href="{{ url_for('ask_question') }}" class="btn btn-primary rounded-pill">
-                            Start Asking <i class="fas fa-arrow-right ms-1"></i>
+                        <a href="{{ url_for('assessment') }}" class="btn btn-primary rounded-pill">
+                            Start Assessment <i class="fas fa-arrow-right ms-1"></i>
                         </a>
                     </div>
                 </div>
@@ -66,15 +65,14 @@
                 <div class="feature-card card h-100 border-0 shadow-sm hover-lift">
                     <div class="card-body text-center p-4">
                         <div class="feature-icon mb-3">
-                            <i class="fas fa-calendar-check text-success display-4"></i>
+                            <i class="fas fa-clipboard-list text-success display-4"></i>
                         </div>
-                        <h4 class="card-title text-success">AI Study Plans</h4>
+                        <h4 class="card-title text-success">Interactive Quizzes</h4>
                         <p class="card-text">
-                            Get a personalized AI study plan that's just right for you! 
-                            I'll break down AI topics into fun, manageable steps.
+                            Test your AI knowledge with fun, interactive quizzes on specific topics. Track your progress and challenge yourself!
                         </p>
-                        <a href="{{ url_for('study_plan') }}" class="btn btn-success rounded-pill">
-                            Create Plan <i class="fas fa-arrow-right ms-1"></i>
+                        <a href="{{ url_for('quiz') }}" class="btn btn-success rounded-pill">
+                            Take Quiz <i class="fas fa-arrow-right ms-1"></i>
                         </a>
                     </div>
                 </div>
@@ -84,18 +82,15 @@
                 <div class="feature-card card h-100 border-0 shadow-sm hover-lift">
                     <div class="card-body text-center p-4">
                         <div class="feature-icon mb-3">
-                            <i class="fas fa-trophy text-warning display-4"></i>
+                            <i class="fas fa-comments text-warning display-4"></i>
                         </div>
-                        <h4 class="card-title text-warning">Age-Appropriate</h4>
+                        <h4 class="card-title text-warning">Ask AI Questions</h4>
                         <p class="card-text">
-                            Every explanation is tailored to your age and learning level. 
-                            No confusing words - just clear, fun explanations!
+                            Ask me anything about artificial intelligence and I'll explain it in a way that's perfect for your age and understanding level!
                         </p>
-                        <div class="pt-3">
-                            <span class="badge bg-warning text-dark px-3 py-2 rounded-pill">
-                                Ages 5-18
-                            </span>
-                        </div>
+                        <a href="{{ url_for('ask_question') }}" class="btn btn-warning rounded-pill">
+                            Ask Questions <i class="fas fa-arrow-right ms-1"></i>
+                        </a>
                     </div>
                 </div>
             </div>

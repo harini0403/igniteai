@@ -1,0 +1,307 @@
+{% extends "base.html" %}
+
+{% block title %}AI Quiz - Ignite AI{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <!-- Header -->
+            <div class="text-center mb-5">
+                <h1 class="display-5 fw-bold mb-3">
+                    <i class="fas fa-clipboard-list text-primary me-3"></i>
+                    AI Topic Quiz
+                </h1>
+                <p class="lead text-muted">
+                    Test your knowledge on specific AI topics and see how much you've learned!
+                </p>
+            </div>
+
+            <!-- Quiz Form -->
+            <div class="card shadow-lg border-0 rounded-4">
+                <div class="card-header bg-primary text-white text-center py-4">
+                    <h4 class="mb-0">
+                        <i class="fas fa-brain me-2"></i>
+                        Create Your AI Quiz
+                    </h4>
+                </div>
+                
+                <div class="card-body p-5">
+                    <form method="POST" id="quizForm">
+                        <!-- Age Input -->
+                        <div class="mb-4">
+                            <label for="age" class="form-label fs-5 fw-semibold">
+                                <i class="fas fa-birthday-cake text-warning me-2"></i>
+                                How old are you?
+                            </label>
+                            <div class="input-group input-group-lg">
+                                <span class="input-group-text">
+                                    <i class="fas fa-user"></i>
+                                </span>
+                                <input type="number" 
+                                       class="form-control" 
+                                       id="age" 
+                                       name="age" 
+                                       min="5" 
+                                       max="18" 
+                                       placeholder="Enter your age (5-18)"
+                                       required>
+                                <span class="input-group-text">years old</span>
+                            </div>
+                        </div>
+
+                        <!-- Topic Input -->
+                        <div class="mb-4">
+                            <label for="topic" class="form-label fs-5 fw-semibold">
+                                <i class="fas fa-lightbulb text-success me-2"></i>
+                                Which AI topic do you want to quiz on?
+                            </label>
+                            <input type="text" 
+                                   class="form-control form-control-lg" 
+                                   id="topic" 
+                                   name="topic" 
+                                   placeholder="e.g., Machine Learning, Neural Networks, Computer Vision"
+                                   required
+                                   minlength="3"
+                                   maxlength="100">
+                            <div class="form-text">
+                                <i class="fas fa-info-circle me-1"></i>
+                                Choose any AI topic you want to test your knowledge on
+                            </div>
+                        </div>
+
+                        <!-- Difficulty Level -->
+                        <div class="mb-4">
+                            <label class="form-label fs-5 fw-semibold">
+                                <i class="fas fa-chart-line text-info me-2"></i>
+                                Choose difficulty level
+                            </label>
+                            <div class="row g-3">
+                                <div class="col-md-4">
+                                    <div class="form-check custom-radio">
+                                        <input class="form-check-input" type="radio" name="difficulty" id="beginner" value="beginner" checked>
+                                        <label class="form-check-label w-100 p-3 border rounded text-center" for="beginner">
+                                            <i class="fas fa-seedling text-success d-block mb-2 fs-4"></i>
+                                            <strong>Beginner</strong>
+                                            <br><small class="text-muted">Just getting started</small>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-check custom-radio">
+                                        <input class="form-check-input" type="radio" name="difficulty" id="intermediate" value="intermediate">
+                                        <label class="form-check-label w-100 p-3 border rounded text-center" for="intermediate">
+                                            <i class="fas fa-mountain text-warning d-block mb-2 fs-4"></i>
+                                            <strong>Intermediate</strong>
+                                            <br><small class="text-muted">Some experience</small>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-check custom-radio">
+                                        <input class="form-check-input" type="radio" name="difficulty" id="advanced" value="advanced">
+                                        <label class="form-check-label w-100 p-3 border rounded text-center" for="advanced">
+                                            <i class="fas fa-rocket text-danger d-block mb-2 fs-4"></i>
+                                            <strong>Advanced</strong>
+                                            <br><small class="text-muted">Expert level</small>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary btn-lg px-5 py-3 rounded-pill" id="submitBtn">
+                                <span class="submit-text">
+                                    <i class="fas fa-magic me-2"></i>
+                                    Generate My Quiz!
+                                </span>
+                                <span class="loading-text d-none">
+                                    <i class="fas fa-spinner fa-spin me-2"></i>
+                                    Creating your quiz...
+                                </span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Popular Quiz Topics -->
+            <div class="mt-5">
+                <h3 class="text-center mb-4">
+                    <i class="fas fa-fire text-warning me-2"></i>
+                    Popular Quiz Topics
+                </h3>
+                
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="card border-0 bg-light h-100">
+                            <div class="card-body">
+                                <h6 class="text-primary mb-3">
+                                    <i class="fas fa-brain me-2"></i>
+                                    Core AI Concepts
+                                </h6>
+                                <div class="d-flex flex-wrap gap-2">
+                                    <span class="badge bg-primary-subtle text-primary px-2 py-1 quiz-topic-badge" data-topic="Artificial Intelligence">Artificial Intelligence</span>
+                                    <span class="badge bg-primary-subtle text-primary px-2 py-1 quiz-topic-badge" data-topic="Machine Learning">Machine Learning</span>
+                                    <span class="badge bg-primary-subtle text-primary px-2 py-1 quiz-topic-badge" data-topic="Deep Learning">Deep Learning</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <div class="card border-0 bg-light h-100">
+                            <div class="card-body">
+                                <h6 class="text-success mb-3">
+                                    <i class="fas fa-robot me-2"></i>
+                                    AI Applications
+                                </h6>
+                                <div class="d-flex flex-wrap gap-2">
+                                    <span class="badge bg-success-subtle text-success px-2 py-1 quiz-topic-badge" data-topic="Computer Vision">Computer Vision</span>
+                                    <span class="badge bg-success-subtle text-success px-2 py-1 quiz-topic-badge" data-topic="Natural Language Processing">NLP</span>
+                                    <span class="badge bg-success-subtle text-success px-2 py-1 quiz-topic-badge" data-topic="Robotics">Robotics</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <div class="card border-0 bg-light h-100">
+                            <div class="card-body">
+                                <h6 class="text-info mb-3">
+                                    <i class="fas fa-network-wired me-2"></i>
+                                    Technical Topics
+                                </h6>
+                                <div class="d-flex flex-wrap gap-2">
+                                    <span class="badge bg-info-subtle text-info px-2 py-1 quiz-topic-badge" data-topic="Neural Networks">Neural Networks</span>
+                                    <span class="badge bg-info-subtle text-info px-2 py-1 quiz-topic-badge" data-topic="Algorithms">AI Algorithms</span>
+                                    <span class="badge bg-info-subtle text-info px-2 py-1 quiz-topic-badge" data-topic="Data Science">Data Science</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <div class="card border-0 bg-light h-100">
+                            <div class="card-body">
+                                <h6 class="text-warning mb-3">
+                                    <i class="fas fa-shield-alt me-2"></i>
+                                    AI Ethics & Future
+                                </h6>
+                                <div class="d-flex flex-wrap gap-2">
+                                    <span class="badge bg-warning-subtle text-warning px-2 py-1 quiz-topic-badge" data-topic="AI Ethics">AI Ethics</span>
+                                    <span class="badge bg-warning-subtle text-warning px-2 py-1 quiz-topic-badge" data-topic="AI Safety">AI Safety</span>
+                                    <span class="badge bg-warning-subtle text-warning px-2 py-1 quiz-topic-badge" data-topic="Future of AI">Future of AI</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quiz Benefits -->
+            <div class="mt-5">
+                <h3 class="text-center mb-4">
+                    <i class="fas fa-star text-success me-2"></i>
+                    Why Take AI Quizzes?
+                </h3>
+                
+                <div class="row g-4">
+                    <div class="col-md-4">
+                        <div class="text-center">
+                            <i class="fas fa-chart-line text-primary display-5 mb-3"></i>
+                            <h6 class="text-primary">Track Progress</h6>
+                            <p class="small text-muted">See how much you've learned and identify areas for improvement</p>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4">
+                        <div class="text-center">
+                            <i class="fas fa-lightbulb text-warning display-5 mb-3"></i>
+                            <h6 class="text-warning">Test Knowledge</h6>
+                            <p class="small text-muted">Challenge yourself with questions tailored to your level</p>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4">
+                        <div class="text-center">
+                            <i class="fas fa-trophy text-success display-5 mb-3"></i>
+                            <h6 class="text-success">Build Confidence</h6>
+                            <p class="small text-muted">Gain confidence in your AI knowledge through practice</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<style>
+.custom-radio .form-check-input {
+    display: none;
+}
+
+.custom-radio .form-check-label {
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.custom-radio .form-check-label:hover {
+    background-color: var(--bs-light);
+    border-color: var(--bs-primary) !important;
+}
+
+.custom-radio .form-check-input:checked + .form-check-label {
+    background-color: rgba(var(--bs-primary-rgb), 0.1);
+    border-color: var(--bs-primary) !important;
+    color: var(--bs-primary);
+}
+
+.quiz-topic-badge {
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.quiz-topic-badge:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const topicInput = document.getElementById('topic');
+    const form = document.getElementById('quizForm');
+    
+    // Handle topic badge clicks
+    document.querySelectorAll('.quiz-topic-badge').forEach(badge => {
+        badge.addEventListener('click', function() {
+            const topic = this.getAttribute('data-topic');
+            topicInput.value = topic;
+            topicInput.focus();
+            
+            // Add visual feedback
+            this.style.transform = 'scale(1.1)';
+            setTimeout(() => {
+                this.style.transform = 'scale(1)';
+            }, 200);
+        });
+    });
+    
+    // Handle form submission
+    form.addEventListener('submit', function() {
+        const submitBtn = document.getElementById('submitBtn');
+        const submitText = submitBtn.querySelector('.submit-text');
+        const loadingText = submitBtn.querySelector('.loading-text');
+        
+        submitText.classList.add('d-none');
+        loadingText.classList.remove('d-none');
+        submitBtn.disabled = true;
+    });
+});
+</script>
+{% endblock %}

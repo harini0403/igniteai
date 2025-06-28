@@ -1,0 +1,221 @@
+{% extends "base.html" %}
+
+{% block title %}Take Assessment - Ignite AI{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <!-- Header -->
+            <div class="text-center mb-5">
+                <h1 class="display-6 fw-bold mb-3">
+                    <i class="fas fa-brain text-primary me-3"></i>
+                    {{ assessment.title }}
+                </h1>
+                <div class="d-flex justify-content-center gap-3 flex-wrap">
+                    <span class="badge bg-primary fs-6 px-3 py-2 rounded-pill">
+                        <i class="fas fa-user me-1"></i>
+                        Age {{ age }}
+                    </span>
+                    <span class="badge bg-success fs-6 px-3 py-2 rounded-pill">
+                        <i class="fas fa-clock me-1"></i>
+                        {{ assessment.estimated_time }}
+                    </span>
+                    <span class="badge bg-info fs-6 px-3 py-2 rounded-pill">
+                        <i class="fas fa-question me-1"></i>
+                        {{ assessment.total_questions }} questions
+                    </span>
+                </div>
+            </div>
+
+            <!-- Assessment Form -->
+            <form action="{{ url_for('submit_assessment') }}" method="POST" id="assessmentForm">
+                {% for question in assessment.questions %}
+                <div class="card mb-4 border-0 shadow-sm">
+                    <div class="card-header bg-light">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h6 class="mb-0 text-primary">
+                                <i class="fas fa-question-circle me-2"></i>
+                                Question {{ question.id }} of {{ assessment.total_questions }}
+                            </h6>
+                            <span class="badge bg-{{ 'success' if question.difficulty == 'easy' else 'warning' if question.difficulty == 'medium' else 'danger' }}">
+                                {{ question.difficulty.title() }}
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <div class="card-body p-4">
+                        <h5 class="card-title mb-4">{{ question.question }}</h5>
+                        
+                        <div class="row g-3">
+                            {% for option_key, option_text in question.options.items() %}
+                            <div class="col-md-6">
+                                <div class="form-check custom-option">
+                                    <input class="form-check-input" 
+                                           type="radio" 
+                                           name="question_{{ question.id }}" 
+                                           id="q{{ question.id }}_{{ option_key }}" 
+                                           value="{{ option_key }}"
+                                           required>
+                                    <label class="form-check-label w-100 p-3 border rounded hover-option" 
+                                           for="q{{ question.id }}_{{ option_key }}">
+                                        <strong>{{ option_key }}.</strong> {{ option_text }}
+                                    </label>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        
+                        <div class="mt-3">
+                            <small class="text-muted">
+                                <i class="fas fa-tag me-1"></i>
+                                Topic: {{ question.topic }}
+                            </small>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+
+                <!-- Submit Section -->
+                <div class="card border-0 shadow-lg">
+                    <div class="card-body text-center p-5">
+                        <h5 class="mb-3">Ready to see your results?</h5>
+                        <p class="text-muted mb-4">
+                            Make sure you've answered all questions before submitting.
+                        </p>
+                        
+                        <button type="submit" class="btn btn-success btn-lg px-5 py-3 rounded-pill" id="submitBtn">
+                            <span class="submit-text">
+                                <i class="fas fa-check-circle me-2"></i>
+                                Submit Assessment
+                            </span>
+                            <span class="loading-text d-none">
+                                <i class="fas fa-spinner fa-spin me-2"></i>
+                                Analyzing your answers...
+                            </span>
+                        </button>
+                    </div>
+                </div>
+            </form>
+
+            <!-- Progress Indicator -->
+            <div class="fixed-bottom bg-white shadow p-3 d-none" id="progressBar">
+                <div class="container">
+                    <div class="d-flex align-items-center">
+                        <small class="me-3">Progress:</small>
+                        <div class="progress flex-grow-1 me-3">
+                            <div class="progress-bar" role="progressbar" style="width: 0%"></div>
+                        </div>
+                        <small class="text-muted" id="progressText">0/{{ assessment.total_questions }}</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<style>
+.custom-option {
+    margin: 0;
+}
+
+.hover-option {
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: block;
+    margin: 0;
+}
+
+.hover-option:hover {
+    background-color: var(--bs-light);
+    border-color: var(--bs-primary) !important;
+}
+
+.form-check-input:checked + .hover-option {
+    background-color: rgba(var(--bs-primary-rgb), 0.1);
+    border-color: var(--bs-primary) !important;
+    color: var(--bs-primary);
+}
+
+.fixed-bottom {
+    transition: transform 0.3s ease;
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('assessmentForm');
+    const progressBar = document.getElementById('progressBar');
+    const progressBarFill = progressBar.querySelector('.progress-bar');
+    const progressText = document.getElementById('progressText');
+    const totalQuestions = {{ assessment.total_questions }};
+    
+    // Show progress bar after first interaction
+    let progressShown = false;
+    
+    function updateProgress() {
+        const answeredQuestions = form.querySelectorAll('input[type="radio"]:checked').length;
+        const percentage = (answeredQuestions / totalQuestions) * 100;
+        
+        progressBarFill.style.width = percentage + '%';
+        progressText.textContent = `${answeredQuestions}/${totalQuestions}`;
+        
+        if (!progressShown && answeredQuestions > 0) {
+            progressBar.classList.remove('d-none');
+            progressShown = true;
+        }
+        
+        // Enable submit button when all questions are answered
+        const submitBtn = document.getElementById('submitBtn');
+        if (answeredQuestions === totalQuestions) {
+            submitBtn.classList.remove('btn-outline-success');
+            submitBtn.classList.add('btn-success');
+            progressBarFill.classList.add('bg-success');
+        }
+    }
+    
+    // Add event listeners to all radio buttons
+    form.querySelectorAll('input[type="radio"]').forEach(radio => {
+        radio.addEventListener('change', updateProgress);
+    });
+    
+    // Handle form submission
+    form.addEventListener('submit', function(e) {
+        const answeredQuestions = form.querySelectorAll('input[type="radio"]:checked').length;
+        
+        if (answeredQuestions < totalQuestions) {
+            e.preventDefault();
+            alert(`Please answer all ${totalQuestions} questions before submitting.`);
+            return;
+        }
+        
+        const submitBtn = document.getElementById('submitBtn');
+        const submitText = submitBtn.querySelector('.submit-text');
+        const loadingText = submitBtn.querySelector('.loading-text');
+        
+        submitText.classList.add('d-none');
+        loadingText.classList.remove('d-none');
+        submitBtn.disabled = true;
+    });
+    
+    // Auto-scroll to next question after answering
+    form.querySelectorAll('input[type="radio"]').forEach(radio => {
+        radio.addEventListener('change', function() {
+            setTimeout(() => {
+                const currentCard = this.closest('.card');
+                const nextCard = currentCard.nextElementSibling;
+                
+                if (nextCard && nextCard.classList.contains('card')) {
+                    nextCard.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'center'
+                    });
+                }
+            }, 300);
+        });
+    });
+});
+</script>
+{% endblock %}
