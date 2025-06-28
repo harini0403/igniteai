@@ -53,4 +53,4 @@ templates/: HTML templates for onboarding and learning screens
 
 🏡 Hosted & Live App Link:
 
-Deployed on Replit: https://TeacherTrackPro.harini20vattiku.repl.co
+Deployed on Replit: https://Igniteai.harini20vattiku.repl.co
