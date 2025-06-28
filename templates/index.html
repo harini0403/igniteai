@@ -1,0 +1,166 @@
+{% extends "base.html" %}
+
+{% block title %}Ignite AI - Learn with AI{% endblock %}
+
+{% block content %}
+<div class="hero-section bg-gradient text-white py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h1 class="display-4 fw-bold mb-4 animate-bounce">
+                    <i class="fas fa-fire text-warning me-3"></i>
+                    Welcome to Ignite AI!
+                </h1>
+                <p class="lead mb-4">
+                    Your friendly AI companion that makes learning about artificial intelligence fun and easy! 
+                    Get age-appropriate explanations about AI concepts and personalized AI study plans.
+                </p>
+                <div class="d-flex gap-3 flex-wrap">
+                    <a href="{{ url_for('ask_question') }}" class="btn btn-warning btn-lg px-4 py-3 rounded-pill">
+                        <i class="fas fa-question-circle me-2"></i>Ask a Question
+                    </a>
+                    <a href="{{ url_for('study_plan') }}" class="btn btn-outline-light btn-lg px-4 py-3 rounded-pill">
+                        <i class="fas fa-calendar-alt me-2"></i>Create Study Plan
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-6 text-center">
+                <div class="hero-illustration">
+                    <i class="fas fa-book-open display-1 text-warning animate-float"></i>
+                    <i class="fas fa-star text-info animate-twinkle"></i>
+                    <i class="fas fa-lightbulb text-success animate-pulse"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container py-5">
+    <!-- Features Section -->
+    <section class="mb-5">
+        <h2 class="text-center mb-5">
+            <i class="fas fa-magic me-2 text-primary"></i>
+            What Can I Do For You?
+        </h2>
+        
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="feature-card card h-100 border-0 shadow-sm hover-lift">
+                    <div class="card-body text-center p-4">
+                        <div class="feature-icon mb-3">
+                            <i class="fas fa-comments text-primary display-4"></i>
+                        </div>
+                        <h4 class="card-title text-primary">Ask AI Questions</h4>
+                        <p class="card-text">
+                            Ask me anything about artificial intelligence and I'll explain it in a way that's perfect for your age! 
+                            From neural networks to machine learning to robotics - I'm here to help.
+                        </p>
+                        <a href="{{ url_for('ask_question') }}" class="btn btn-primary rounded-pill">
+                            Start Asking <i class="fas fa-arrow-right ms-1"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="feature-card card h-100 border-0 shadow-sm hover-lift">
+                    <div class="card-body text-center p-4">
+                        <div class="feature-icon mb-3">
+                            <i class="fas fa-calendar-check text-success display-4"></i>
+                        </div>
+                        <h4 class="card-title text-success">AI Study Plans</h4>
+                        <p class="card-text">
+                            Get a personalized AI study plan that's just right for you! 
+                            I'll break down AI topics into fun, manageable steps.
+                        </p>
+                        <a href="{{ url_for('study_plan') }}" class="btn btn-success rounded-pill">
+                            Create Plan <i class="fas fa-arrow-right ms-1"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="feature-card card h-100 border-0 shadow-sm hover-lift">
+                    <div class="card-body text-center p-4">
+                        <div class="feature-icon mb-3">
+                            <i class="fas fa-trophy text-warning display-4"></i>
+                        </div>
+                        <h4 class="card-title text-warning">Age-Appropriate</h4>
+                        <p class="card-text">
+                            Every explanation is tailored to your age and learning level. 
+                            No confusing words - just clear, fun explanations!
+                        </p>
+                        <div class="pt-3">
+                            <span class="badge bg-warning text-dark px-3 py-2 rounded-pill">
+                                Ages 5-18
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="mb-5">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h2 class="mb-4">
+                    <i class="fas fa-cogs me-2 text-info"></i>
+                    How It Works
+                </h2>
+                <div class="steps">
+                    <div class="step-item d-flex mb-4">
+                        <div class="step-number">
+                            <span class="badge bg-info rounded-circle p-3">1</span>
+                        </div>
+                        <div class="step-content ms-3">
+                            <h5>Tell Me Your Age</h5>
+                            <p class="text-muted">This helps me explain things in the best way for you!</p>
+                        </div>
+                    </div>
+                    
+                    <div class="step-item d-flex mb-4">
+                        <div class="step-number">
+                            <span class="badge bg-info rounded-circle p-3">2</span>
+                        </div>
+                        <div class="step-content ms-3">
+                            <h5>Ask Your Question</h5>
+                            <p class="text-muted">Type in anything you want to learn about!</p>
+                        </div>
+                    </div>
+                    
+                    <div class="step-item d-flex mb-4">
+                        <div class="step-number">
+                            <span class="badge bg-info rounded-circle p-3">3</span>
+                        </div>
+                        <div class="step-content ms-3">
+                            <h5>Get Your Answer</h5>
+                            <p class="text-muted">Receive a fun, easy-to-understand explanation just for you!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 text-center">
+                <div class="illustration-container">
+                    <i class="fas fa-user-graduate display-1 text-primary animate-bounce"></i>
+                    <i class="fas fa-arrow-right text-muted mx-3 display-4"></i>
+                    <i class="fas fa-robot display-1 text-success animate-pulse"></i>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section class="text-center bg-light rounded-4 p-5">
+        <h2 class="mb-3">Ready to Ignite Your AI Learning?</h2>
+        <p class="lead mb-4">Join thousands of students who are already sparking their AI journey with Ignite AI!</p>
+        <div class="d-flex justify-content-center gap-3 flex-wrap">
+            <a href="{{ url_for('ask_question') }}" class="btn btn-primary btn-lg rounded-pill px-5">
+                <i class="fas fa-rocket me-2"></i>Get Started Now
+            </a>
+        </div>
+    </section>
+</div>
+{% endblock %}

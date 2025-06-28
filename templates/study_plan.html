@@ -1,0 +1,327 @@
+{% extends "base.html" %}
+
+{% block title %}Study Plan - Ignite AI{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <!-- Header -->
+            <div class="text-center mb-5">
+                <h1 class="display-5 fw-bold mb-3">
+                    <i class="fas fa-calendar-alt text-success me-3"></i>
+                    Personalized AI Study Plan
+                </h1>
+                <p class="lead text-muted">
+                    Let me create a custom AI learning plan just for you!
+                </p>
+            </div>
+
+            {% if not show_plan %}
+            <!-- Study Plan Form -->
+            <div class="card shadow-lg border-0 rounded-4 mb-5">
+                <div class="card-header bg-success text-white text-center py-4">
+                    <h4 class="mb-0">
+                        <i class="fas fa-book me-2"></i>
+                        Create Your AI Study Plan
+                    </h4>
+                </div>
+                
+                <div class="card-body p-5">
+                    <form method="POST" id="studyPlanForm">
+                        <!-- Age Input -->
+                        <div class="mb-4">
+                            <label for="age" class="form-label fs-5 fw-semibold">
+                                <i class="fas fa-birthday-cake text-warning me-2"></i>
+                                How old are you?
+                            </label>
+                            <div class="input-group input-group-lg">
+                                <span class="input-group-text">
+                                    <i class="fas fa-user"></i>
+                                </span>
+                                <input type="number" 
+                                       class="form-control" 
+                                       id="age" 
+                                       name="age" 
+                                       min="5" 
+                                       max="18" 
+                                       placeholder="Enter your age (5-18)"
+                                       required>
+                                <span class="input-group-text">years old</span>
+                            </div>
+                        </div>
+
+                        <!-- Topic Input -->
+                        <div class="mb-4">
+                            <label for="topic" class="form-label fs-5 fw-semibold">
+                                <i class="fas fa-lightbulb text-primary me-2"></i>
+                                What AI topic do you want to learn?
+                            </label>
+                            <input type="text" 
+                                   class="form-control form-control-lg" 
+                                   id="topic" 
+                                   name="topic" 
+                                   placeholder="e.g., Machine Learning, Neural Networks, Computer Vision, Natural Language Processing"
+                                   required
+                                   minlength="3"
+                                   maxlength="100">
+                            <div class="form-text">
+                                <i class="fas fa-info-circle me-1"></i>
+                                Enter any AI subject or topic you'd like to study
+                            </div>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-success btn-lg px-5 py-3 rounded-pill" id="submitBtn">
+                                <span class="submit-text">
+                                    <i class="fas fa-magic me-2"></i>
+                                    Create My Study Plan!
+                                </span>
+                                <span class="loading-text d-none">
+                                    <i class="fas fa-spinner fa-spin me-2"></i>
+                                    Creating your plan...
+                                </span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Topic Suggestions -->
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <div class="card border-0 bg-light h-100">
+                        <div class="card-header bg-primary text-white">
+                            <h6 class="mb-0">
+                                <i class="fas fa-graduation-cap me-2"></i>
+                                Popular Study Topics
+                            </h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="d-flex flex-wrap gap-2">
+                                <span class="badge bg-primary-subtle text-primary px-3 py-2">Machine Learning</span>
+                                <span class="badge bg-success-subtle text-success px-3 py-2">Neural Networks</span>
+                                <span class="badge bg-info-subtle text-info px-3 py-2">Computer Vision</span>
+                                <span class="badge bg-warning-subtle text-warning px-3 py-2">Robotics</span>
+                                <span class="badge bg-danger-subtle text-danger px-3 py-2">AI Ethics</span>
+                                <span class="badge bg-secondary-subtle text-secondary px-3 py-2">Deep Learning</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="card border-0 bg-light h-100">
+                        <div class="card-header bg-info text-white">
+                            <h6 class="mb-0">
+                                <i class="fas fa-rocket me-2"></i>
+                                What You'll Get
+                            </h6>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-unstyled mb-0">
+                                <li class="mb-2">
+                                    <i class="fas fa-check text-success me-2"></i>
+                                    Weekly learning goals
+                                </li>
+                                <li class="mb-2">
+                                    <i class="fas fa-check text-success me-2"></i>
+                                    Fun activities and exercises
+                                </li>
+                                <li class="mb-2">
+                                    <i class="fas fa-check text-success me-2"></i>
+                                    Progress tracking tips
+                                </li>
+                                <li class="mb-0">
+                                    <i class="fas fa-check text-success me-2"></i>
+                                    Age-appropriate challenges
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {% else %}
+            <!-- Generated Study Plan Display -->
+            <div class="mb-4">
+                <div class="alert alert-success border-0 shadow-sm">
+                    <h5 class="alert-heading">
+                        <i class="fas fa-check-circle me-2"></i>
+                        Your Study Plan is Ready!
+                    </h5>
+                    <p class="mb-0">Here's your personalized study plan for <strong>{{ topic }}</strong>, designed for age {{ age }}.</p>
+                </div>
+            </div>
+
+            <!-- Plan Header -->
+            <div class="card mb-4 border-0 shadow-lg">
+                <div class="card-header bg-gradient-primary text-white p-4">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <h2 class="mb-1">{{ plan_data.title }}</h2>
+                            <p class="mb-0 opacity-75">{{ plan_data.duration }}</p>
+                        </div>
+                        <div class="col-auto">
+                            <span class="badge bg-light text-dark fs-6 px-3 py-2">
+                                {{ plan_data.difficulty_level.title() }} Level
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Weekly Goals -->
+            {% if plan_data.weekly_goals %}
+            <div class="card mb-4 border-0 shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-calendar-week me-2"></i>
+                        Weekly Learning Goals
+                    </h5>
+                </div>
+                <div class="card-body p-0">
+                    <div class="accordion accordion-flush" id="weeklyGoalsAccordion">
+                        {% for goal in plan_data.weekly_goals %}
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button {{ 'collapsed' if loop.index > 1 else '' }}" 
+                                        type="button" 
+                                        data-bs-toggle="collapse" 
+                                        data-bs-target="#week{{ goal.week }}"
+                                        aria-expanded="{{ 'true' if loop.index == 1 else 'false' }}">
+                                    <i class="fas fa-calendar-day me-3 text-primary"></i>
+                                    <strong>Week {{ goal.week }}: {{ goal.goal }}</strong>
+                                </button>
+                            </h2>
+                            <div id="week{{ goal.week }}" 
+                                 class="accordion-collapse collapse {{ 'show' if loop.index == 1 else '' }}" 
+                                 data-bs-parent="#weeklyGoalsAccordion">
+                                <div class="accordion-body">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <h6 class="text-success mb-3">
+                                                <i class="fas fa-tasks me-2"></i>
+                                                Activities
+                                            </h6>
+                                            <ul class="list-group list-group-flush">
+                                                {% for activity in goal.activities %}
+                                                <li class="list-group-item border-0 px-0">
+                                                    <i class="fas fa-play-circle text-success me-2"></i>
+                                                    {{ activity }}
+                                                </li>
+                                                {% endfor %}
+                                            </ul>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <h6 class="text-info mb-3">
+                                                <i class="fas fa-book me-2"></i>
+                                                Resources
+                                            </h6>
+                                            <ul class="list-group list-group-flush">
+                                                {% for resource in goal.resources %}
+                                                <li class="list-group-item border-0 px-0">
+                                                    <i class="fas fa-external-link-alt text-info me-2"></i>
+                                                    {{ resource }}
+                                                </li>
+                                                {% endfor %}
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <div class="row g-4">
+                <!-- Progress Tracking -->
+                {% if plan_data.progress_tracking %}
+                <div class="col-md-6">
+                    <div class="card h-100 border-0 shadow-sm bg-success bg-opacity-10">
+                        <div class="card-header bg-success text-white">
+                            <h6 class="mb-0">
+                                <i class="fas fa-chart-line me-2"></i>
+                                Track Your Progress
+                            </h6>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-unstyled mb-0">
+                                {% for method in plan_data.progress_tracking %}
+                                <li class="mb-2">
+                                    <i class="fas fa-check-square text-success me-2"></i>
+                                    {{ method }}
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- Fun Challenges -->
+                {% if plan_data.fun_challenges %}
+                <div class="col-md-6">
+                    <div class="card h-100 border-0 shadow-sm bg-warning bg-opacity-10">
+                        <div class="card-header bg-warning text-dark">
+                            <h6 class="mb-0">
+                                <i class="fas fa-trophy me-2"></i>
+                                Fun Challenges
+                            </h6>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-unstyled mb-0">
+                                {% for challenge in plan_data.fun_challenges %}
+                                <li class="mb-2">
+                                    <i class="fas fa-star text-warning me-2"></i>
+                                    {{ challenge }}
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="text-center mt-5">
+                <div class="d-flex justify-content-center gap-3 flex-wrap">
+                    <a href="{{ url_for('study_plan') }}" class="btn btn-success btn-lg rounded-pill px-4">
+                        <i class="fas fa-plus me-2"></i>
+                        Create Another Plan
+                    </a>
+                    <a href="{{ url_for('ask_question') }}" class="btn btn-primary btn-lg rounded-pill px-4">
+                        <i class="fas fa-question-circle me-2"></i>
+                        Ask a Question
+                    </a>
+                    <a href="{{ url_for('index') }}" class="btn btn-outline-secondary btn-lg rounded-pill px-4">
+                        <i class="fas fa-home me-2"></i>
+                        Back to Home
+                    </a>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.getElementById('studyPlanForm')?.addEventListener('submit', function() {
+    const submitBtn = document.getElementById('submitBtn');
+    const submitText = submitBtn.querySelector('.submit-text');
+    const loadingText = submitBtn.querySelector('.loading-text');
+    
+    // Show loading state
+    submitText.classList.add('d-none');
+    loadingText.classList.remove('d-none');
+    submitBtn.disabled = true;
+});
+</script>
+{% endblock %}

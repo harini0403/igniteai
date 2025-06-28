@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+
+{% block title %}AI Explanation - Ignite AI{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <!-- Header -->
+            <div class="text-center mb-5">
+                <h1 class="display-6 fw-bold mb-3">
+                    <i class="fas fa-lightbulb text-warning me-3"></i>
+                    Here's Your Answer!
+                </h1>
+                <div class="badge bg-primary fs-6 px-3 py-2 rounded-pill">
+                    <i class="fas fa-user me-1"></i>
+                    Explained for age {{ age }}
+                </div>
+            </div>
+
+            <!-- Question Display -->
+            <div class="card mb-4 border-0 shadow-sm">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-question-circle me-2"></i>
+                        Your Question
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <p class="fs-5 mb-0">"{{ question }}"</p>
+                </div>
+            </div>
+
+            <!-- AI Explanation -->
+            <div class="card mb-4 border-0 shadow-lg">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-robot me-2"></i>
+                        AI Explanation
+                    </h5>
+                </div>
+                <div class="card-body p-4">
+                    <div class="explanation-text fs-5 lh-lg">
+                        {{ ai_response.explanation }}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Key Points -->
+            {% if ai_response.key_points %}
+            <div class="card mb-4 border-0 shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-key me-2"></i>
+                        Key Points to Remember
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        {% for point in ai_response.key_points %}
+                        <li class="list-group-item border-0 py-3">
+                            <i class="fas fa-check-circle text-success me-2"></i>
+                            {{ point }}
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            {% endif %}
+
+            <div class="row g-4">
+                <!-- Fun Fact -->
+                {% if ai_response.fun_fact %}
+                <div class="col-md-6">
+                    <div class="card h-100 border-0 shadow-sm bg-warning bg-opacity-10">
+                        <div class="card-header bg-warning text-dark">
+                            <h6 class="mb-0">
+                                <i class="fas fa-star me-2"></i>
+                                Fun Fact!
+                            </h6>
+                        </div>
+                        <div class="card-body">
+                            <p class="mb-0">{{ ai_response.fun_fact }}</p>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- Suggested Activities -->
+                {% if ai_response.suggested_activities %}
+                <div class="col-md-6">
+                    <div class="card h-100 border-0 shadow-sm bg-info bg-opacity-10">
+                        <div class="card-header bg-info text-white">
+                            <h6 class="mb-0">
+                                <i class="fas fa-play-circle me-2"></i>
+                                Try These Activities
+                            </h6>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-unstyled mb-0">
+                                {% for activity in ai_response.suggested_activities %}
+                                <li class="mb-2">
+                                    <i class="fas fa-arrow-right text-info me-2"></i>
+                                    {{ activity }}
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="text-center mt-5">
+                <div class="d-flex justify-content-center gap-3 flex-wrap">
+                    <a href="{{ url_for('ask_question') }}" class="btn btn-primary btn-lg rounded-pill px-4">
+                        <i class="fas fa-question-circle me-2"></i>
+                        Ask Another Question
+                    </a>
+                    <a href="{{ url_for('study_plan') }}" class="btn btn-success btn-lg rounded-pill px-4">
+                        <i class="fas fa-calendar-alt me-2"></i>
+                        Create Study Plan
+                    </a>
+                    <a href="{{ url_for('index') }}" class="btn btn-outline-secondary btn-lg rounded-pill px-4">
+                        <i class="fas fa-home me-2"></i>
+                        Back to Home
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
